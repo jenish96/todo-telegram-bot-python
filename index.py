@@ -60,6 +60,7 @@ def get_todos(user_id):
     db.commit()
     return res
 
+
 @ bot.message_handler(commands=['start'])
 def send_welcome(message):
     if (find_user(int(message.chat.id)) == 0):
@@ -117,9 +118,14 @@ def callback_markdone(call):
 
 @ bot.message_handler(commands=['delete'])
 def delete_task_cmd(message):
-    todo_id = int(message.text.split(' ', 1)[1])
-    delete_todo(todo_id)
-    bot.reply_to(message, f"Todo {todo_id} deleted!")
+    llen = len(message.text.split(' ', 1))
+    if llen == 2:
+        todo_id = int(message.text.split(' ', 1)[1])
+        delete_todo(todo_id)
+        bot.reply_to(message, f"Todo {todo_id} deleted!")
+    if (message.text.split(' ', 1)[0] == '/delete' and llen == 1):
+        bot.reply_to(
+            message, "Please provide a task description. Use: /delete <task_id>")
 
 
 setup_db()
